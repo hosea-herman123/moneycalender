@@ -1,0 +1,58 @@
+
+{{define "title"}}Reminders{{end}}
+
+{{define "content"}}
+<h1>Reminders</h1>
+<p class="subtitle">A daily summary of what is due soon and which invoices are overdue.</p>
+
+{{if .Error}}<div class="alert bad">Could not send: {{.Error}}</div>{{end}}
+{{if .Result}}<div class="alert good">{{.Result}}</div>{{end}}
+
+<div class="info-grid">
+    <div class="info-item">
+        <span class="info-label">Email</span>
+        <span class="info-value">{{if .Configured}}Connected{{else}}Not set up{{end}}</span>
+    </div>
+    <div class="info-item">
+        <span class="info-label">Schedule</span>
+        <span class="info-value">Once a day, after 8am</span>
+    </div>
+    <div class="info-item">
+        <span class="info-label">Items to report</span>
+        <span class="info-value">{{.Reminder.Count}}</span>
+    </div>
+</div>
+
+<h2>Today's reminder</h2>
+
+{{if .Reminder.Count}}
+<div class="message">
+    <div class="message-head">
+        <span class="info-label">Subject</span>
+        <div class="message-subject">{{.Reminder.Subject}}</div>
+    </div>
+
+    <pre class="message-body">{{.Reminder.Body}}</pre>
+
+    <div class="message-foot">
+        <span class="meta">Enter the email address that should receive this reminder.</span>
+
+        <form method="POST" action="/reminders">
+            <label for="reminder-email">Recipient email</label>
+            <input
+                type="email"
+                id="reminder-email"
+                name="email"
+                value="{{.Email}}"
+                placeholder="example@gmail.com"
+                required
+                style="width:100%;max-width:400px;margin:8px 0 12px;"
+            >
+            <button type="submit">Send reminder now</button>
+        </form>
+    </div>
+</div>
+{{else}}
+<div class="card">Nothing is due in the next few days and no invoices are overdue.</div>
+{{end}}
+{{end}}

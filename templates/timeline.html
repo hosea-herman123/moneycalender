@@ -1,0 +1,60 @@
+{{define "title"}}Timeline{{end}}
+
+{{define "content"}}
+<h1>Money Timeline</h1>
+<p class="subtitle">The next 30 days of money going out and coming in.</p>
+
+<div class="card">
+    <form class="inline" method="GET" action="/timeline">
+        <label>Cash on hand today (KES)</label>
+        <input type="number" name="cash" min="0" value="{{if .HasCash}}{{.Cash}}{{end}}" required>
+        <button type="submit">Check</button>
+    </form>
+</div>
+
+{{if .Warning}}
+    <div class="alert bad">{{.Warning}}</div>
+{{else if .HasCash}}
+    <div class="alert good">No cash crunch in the next 30 days.</div>
+{{else}}
+    <div class="alert info">Enter your cash on hand to see whether you will run short.</div>
+{{end}}
+
+{{if .Overdue}}
+<h2>Overdue invoices to chase</h2>
+{{range .Overdue}}
+<div class="card">
+    <strong>{{.Label}}</strong>: KES {{.Amount}}, due {{.DateText}}<br>
+    <span class="meta">{{.Detail}}</span>
+</div>
+{{end}}
+{{end}}
+
+<h2>What is coming</h2>
+<div class="table-wrap">
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>What</th>
+            <th>Amount (KES)</th>
+            <th>Balance after</th>
+            <th>Note</th>
+        </tr>
+        {{range .Events}}
+        <tr class="{{if .Short}}short{{end}}">
+            <td>{{.DateText}}</td>
+            <td><span class="badge type-{{.Kind}}">{{if eq .Kind "Out"}}Pay out{{else}}Money in{{end}}</span></td>
+            <td>{{.Label}}</td>
+            <td>{{if .Amount}}{{.Amount}}{{else}}unknown{{end}}</td>
+            <td>{{if $.HasCash}}{{.Balance}}{{if .Short}} (SHORT){{end}}{{else}}-{{end}}</td>
+            <td>{{.Detail}}</td>
+        </tr>
+        {{else}}
+        <tr><td colspan="6">Nothing due in the next 30 days.</td></tr>
+        {{end}}
+    </table>
+</div>
+
+<p class="totals">Total going out: KES {{.TotalOut}} | Total coming in: KES {{.TotalIn}}</p>
+{{end}}

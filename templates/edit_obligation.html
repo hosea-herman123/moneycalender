@@ -1,0 +1,26 @@
+{{define "title"}}Edit Obligation{{end}}
+
+{{define "content"}}
+<h1>Edit Obligation</h1>
+<p class="subtitle">Change the details and save.</p>
+
+<div class="card">
+    <form class="stack" method="POST" action="/obligations/edit">
+        <input type="hidden" name="id" value="{{.ID}}">
+        <label>Name</label>
+        <input type="text" name="name" value="{{.Name}}" required>
+        <label>Agency</label>
+        <input type="text" name="agency" value="{{.Agency}}" required>
+        <label>Day of month (1-31)</label>
+        <input type="number" name="day_of_month" value="{{.DayOfMonth}}" min="1" max="31" required>
+        <label>Estimated amount in KES</label>
+        <input type="number" name="amount" value="{{.Amount}}" min="0">
+        <label>Note</label>
+        <input type="text" name="note" value="{{.Note}}">
+        <div class="actions">
+            <button type="submit">Save changes</button>
+            <a class="btn secondary" href="/">Cancel</a>
+        </div>
+    </form>
+</div>
+{{end}}

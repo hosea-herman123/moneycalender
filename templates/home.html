@@ -1,0 +1,40 @@
+{{define "title"}}Obligations{{end}}
+
+{{define "content"}}
+<h1>Your Obligations</h1>
+<p class="subtitle">Never miss a deadline. Know when cash is coming in.</p>
+<p><a class="btn secondary" href="/setup">Business setup</a></p>
+
+{{range .}}
+<div class="card">
+    <strong>{{.Name}}</strong> <span class="meta">({{.Agency}})</span>
+    {{if .Verify}}<span class="badge status-Pending">Confirm date</span>{{end}}<br>
+    Due {{.Schedule}}
+    {{if .Amount}}<span class="amount"> - about KES {{.Amount}}</span>{{else}}<span class="meta"> - amount not set</span>{{end}}<br>
+    <span class="meta">{{.Note}}</span>
+    <div class="actions">
+        <a class="btn secondary" href="/obligations/edit?id={{.ID}}">Edit</a>
+        <form method="POST" action="/obligations/delete" onsubmit="return confirm('Delete this obligation?')">
+            <input type="hidden" name="id" value="{{.ID}}">
+            <button type="submit" class="danger">Delete</button>
+        </form>
+    </div>
+</div>
+{{else}}
+<div class="card">
+    No obligations yet. <a href="/setup">Tell us about your business</a> and we will build your calendar.
+</div>
+{{end}}
+
+<h2>Add an Obligation</h2>
+<div class="card">
+    <form class="stack" method="POST" action="/add">
+        <input type="text" name="name" placeholder="Name (e.g. Trade association fee)" required>
+        <input type="text" name="agency" placeholder="Agency" required>
+        <input type="number" name="day_of_month" placeholder="Day of month (1-31)" min="1" max="31" required>
+        <input type="number" name="amount" placeholder="Estimated amount in KES (optional)" min="0">
+        <input type="text" name="note" placeholder="Short note (optional)">
+        <button type="submit">Add obligation</button>
+    </form>
+</div>
+{{end}}

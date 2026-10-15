@@ -1,0 +1,12 @@
+
+.git
+.gitignore
+.vscode
+*.exe
+*.db
+data/
+.env
+.env.*
+!.env.example
+run.bat
+Dockerfile*
