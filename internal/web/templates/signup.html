@@ -1,0 +1,10 @@
+{{define "content"}}
+<section class="auth-layout">
+  <div class="auth-copy"><p class="eyebrow">A LITTLE MORE PEACE OF MIND</p><h1>Stay on top of<br><span>the important things.</span></h1><p>One calm place for your business deadlines, invoices and reminders.</p><img class="auth-art" src="/static/ledger.svg" alt="Illustration of a calendar, checklist and a growing plant"></div>
+  <article class="auth-card"><p class="eyebrow">GET STARTED</p><h2>Create your account</h2><p class="panel-copy">Set up your workspace in a couple of minutes.</p>
+    {{if .Error}}<div class="notice notice-error" role="alert">{{.Error}}</div>{{end}}
+    <form method="post" action="/signup" class="stack-form"><label class="field-label">Email address<input type="email" name="email" value="{{.Email}}" required autocomplete="email" placeholder="you@yourbusiness.co.ke"></label><label class="field-label">Password <span>8 characters minimum</span><input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="Choose a secure password"></label><button class="button auth-submit" type="submit">Create my account <span aria-hidden="true">→</span></button></form>
+    <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+  </article>
+</section>
+{{end}}

@@ -1,0 +1,101 @@
+# Kalenda obligations. THE MOAT: keep this file accurate.
+#
+# last_verified is deliberately EMPTY on every rule below. These entries were
+# drafted from general knowledge and MUST be checked against the official
+# source before launch (Day 6 cross-verification). When you have checked one:
+#   1. confirm due_day / due_month, the applicability, and the penalty text
+#   2. replace link with the exact official page you used
+#   3. set last_verified to today's date, e.g. "2026-10-14"
+# Nobody marks their own entry verified: swap with the other dev.
+#
+# Not yet modelled (anniversary-based, needs a "registration date" field on the
+# business): BRS annual return, ODPC registration renewal.
+
+- id: paye
+  name: PAYE return and payment
+  agency: KRA
+  frequency: monthly
+  due_day: 9
+  due_rule: "9th of the month after the salaries were paid"
+  applies_if:
+    has_employees: true
+  penalty: "Late filing and late payment penalties plus interest. Check KRA for the current rates."
+  note: "Tax you deduct from employees' pay must be declared and paid to KRA each month."
+  link: "https://www.kra.go.ke/helping-tax-payers/faqs/more-about-paye"
+  last_verified: ""
+
+- id: vat
+  name: VAT return and payment
+  agency: KRA
+  frequency: monthly
+  due_day: 20
+  due_rule: "20th of the month after the sales month"
+  applies_if:
+    vat_registered: true
+  penalty: "Late filing and late payment penalties plus interest. Check KRA for the current rates."
+  note: "File your VAT return even if you had no sales, and pay any VAT due after offsetting what you paid on purchases."
+  link: "https://www.kra.go.ke/individual/filing-paying/types-of-taxes/value-added-tax"
+  last_verified: ""
+
+- id: nssf
+  name: NSSF contributions
+  agency: NSSF
+  frequency: monthly
+  due_day: 9
+  due_rule: "9th of the month after the salaries were paid"
+  applies_if:
+    has_employees: true
+  penalty: "Late payment attracts a penalty on the unpaid amount. Check NSSF for the current rate."
+  note: "You and your employees both contribute to NSSF. You deduct the employee share and pay both shares."
+  link: "https://www.nssf.or.ke/employers"
+  last_verified: ""
+
+- id: sha
+  name: SHA contributions (employee health cover)
+  agency: SHA
+  frequency: monthly
+  due_day: 9
+  due_rule: "9th of the month after the salaries were paid"
+  applies_if:
+    has_employees: true
+  penalty: "Late payment can cost you a penalty and your employees' cover. Check SHA for current rules."
+  note: "Health contributions deducted from employees' pay are remitted to the Social Health Authority."
+  link: "https://new.sha.go.ke/wp-content/uploads/2025/07/PUBLIC_NOTICE_ON_EMPLOYER_REMITTENCES.pdf"
+  last_verified: ""
+
+- id: housing_levy
+  name: Affordable Housing Levy
+  agency: KRA
+  frequency: monthly
+  due_day: 9
+  due_rule: "9th working day after the end of the month"
+  applies_if:
+    has_employees: true
+  penalty: "Late payment penalties and interest. Check KRA for the current rates."
+  note: "Both you and your employees pay the housing levy. Declare and pay it with your PAYE."
+  link: "https://www.kra.go.ke/news-center/public-notices/2099-collection-of-the-affordable-housing-levy-by-kenya-revenue-authority"
+  last_verified: ""
+
+- id: income_tax_return
+  name: Annual income tax return
+  agency: KRA
+  frequency: annual
+  due_month: 6
+  due_day: 30
+  due_rule: "30 June for the previous calendar year"
+  penalty: "Late filing penalty, even if no tax is due. Check KRA for the current amounts."
+  note: "Individuals file by 30 June. Company returns are generally due six months after the accounting period ends; confirm your business's filing obligation and exact date with KRA."
+  link: "https://www.kra.go.ke/individual/filing-paying/types-of-taxes/individual-income-tax"
+  last_verified: ""
+
+- id: business_permit
+  name: County business permit renewal
+  agency: County government
+  frequency: annual
+  due_month: 3
+  due_day: 31
+  due_rule: "Usually by 31 March, but each county sets its own date and fees"
+  penalty: "Counties charge penalties for late renewal and can close non-compliant premises."
+  note: "Renew your single business permit with your county. Confirm your county's exact deadline."
+  link: "https://new.kenyalaw.org/"
+  last_verified: ""

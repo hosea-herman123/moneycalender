@@ -1,0 +1,10 @@
+{{define "content"}}
+<section class="auth-layout">
+  <div class="auth-copy"><p class="eyebrow">WELCOME BACK</p><h1>Your business,<br><span>in good time.</span></h1><p>Pick up where you left off. Your next steps are right here.</p><img class="auth-art" src="/static/ledger.svg" alt="Illustration of a calendar, checklist and a growing plant"></div>
+  <article class="auth-card"><p class="eyebrow">YOUR WORKSPACE</p><h2>Log in</h2><p class="panel-copy">Enter your details to open your business calendar.</p>
+    {{if .Error}}<div class="notice notice-error" role="alert">{{.Error}}</div>{{end}}
+    <form method="post" action="/login" class="stack-form"><label class="field-label">Email address<input type="email" name="email" value="{{.Email}}" required autocomplete="email" placeholder="you@yourbusiness.co.ke"></label><label class="field-label">Password<input type="password" name="password" required autocomplete="current-password" placeholder="Your password"></label><button class="button auth-submit" type="submit">Log in <span aria-hidden="true">→</span></button></form>
+    <p class="auth-switch">New to Kalenda? <a href="/signup">Create an account</a></p>
+  </article>
+</section>
+{{end}}

@@ -1,0 +1,32 @@
+{{define "content"}}
+<section class="page-intro">
+  <div><p class="eyebrow">YOUR BUSINESS CALENDAR</p><h1>{{.Biz.Name}}<span class="heading-light">, at a glance.</span></h1><p class="intro-copy">The next 90 days, made easier to plan for.</p></div>
+  <button class="button button-secondary" type="button" onclick="document.getElementById('forecast').scrollIntoView({behavior:'smooth'})">Update cash forecast <span aria-hidden="true">↘</span></button>
+</section>
+<div class="legend-row"><span class="legend"><i class="legend-dot deadline-dot"></i> Payments and compliance</span><span class="legend"><i class="legend-dot invoice-dot"></i> Expected income</span><span class="legend-note">Dates are shown in East Africa Time</span></div>
+<section class="calendar-list" aria-label="Upcoming deadlines and invoices">
+{{if not .Items}}<article class="empty-state"><div class="empty-icon">✓</div><h2>You’re clear for now</h2><p>There are no deadlines or invoices in the next 90 days. Check back soon.</p></article>{{end}}
+{{range .Items}}
+<article class="event-card {{.Kind}}">
+  <div class="event-date"><span>{{.DateStr}}</span><strong>{{.DaysLabel}}</strong></div>
+  <div class="event-main">
+    <div class="event-title-line"><h2>{{.Title}}</h2>{{if .Amount}}<span class="event-amount">{{.Amount}}</span>{{end}}</div>
+    <p class="event-meta">{{if .Agency}}{{.Agency}} <span>·</span> {{end}}{{if eq .Kind "invoice"}}Expected income{{else}}Compliance deadline{{end}}</p>
+    {{if .Note}}<p class="event-note">{{.Note}}</p>{{end}}
+    {{if .Penalty}}<p class="event-note penalty"><strong>If late:</strong> {{.Penalty}}</p>{{end}}
+    <div class="event-bottom">{{if .Link}}<a class="source-link" href="{{.Link}}" target="_blank" rel="noopener noreferrer">View official source <span aria-hidden="true">↗</span></a>{{end}}{{if not .Verified}}<span class="badge badge-review">Needs source review</span>{{end}}{{if .Balance}}<span class="forecast-balance {{if .Short}}balance-short{{end}}">Projected balance {{.Balance}}{{if .Short}} · shortfall{{end}}</span>{{end}}</div>
+  </div>
+</article>
+{{end}}
+</section>
+<section class="forecast-panel" id="forecast">
+  <div class="forecast-heading"><div><p class="eyebrow">PLAN AHEAD</p><h2>Your cash forecast</h2><p>See how estimated costs and expected invoice payments could affect your balance.</p></div><span class="forecast-icon" aria-hidden="true">↗</span></div>
+  <details><summary>{{if .Biz.CashConfigured}}Edit forecast assumptions{{else}}Add your starting balance and estimates{{end}}</summary>
+    <form method="post" action="/forecast" class="forecast-form">
+      <label class="field-label">Cash available today <span>KES</span><input type="number" name="cash_balance" min="0" step="1" value="{{.Biz.CashBalance}}" required></label>
+      {{range .ForecastRules}}<label class="field-label">{{.Name}} estimate <span>KES per due date</span><input type="number" name="estimate_{{.ID}}" min="0" step="1" value="{{.Amount}}" required></label>{{end}}
+      <p class="form-hint">These are your own estimates for planning. They are not tax calculations or accounting records.</p><button class="button" type="submit">Save forecast <span aria-hidden="true">→</span></button>
+    </form>
+  </details>
+</section>
+{{end}}
