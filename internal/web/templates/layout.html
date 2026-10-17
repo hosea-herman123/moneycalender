@@ -1,0 +1,32 @@
+{{define "layout"}}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f2">
+  <meta name="description" content="A calmer way for Kenyan small businesses to track deadlines, invoices and cash flow.">
+  <title>Kalenda — your business, in good time</title>
+  <link rel="icon" href="/static/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Main navigation">
+      <a class="brand" href="{{if .User}}/calendar{{else}}/login{{end}}" aria-label="Kalenda home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="4" y="7" width="24" height="21" rx="5"/><path d="M10 4v6M22 4v6M4 13h24M10 18h.01M16 18h.01M22 18h.01M10 23h.01M16 23h.01"/></svg></span>
+        <span>kalenda<span class="brand-dot">.</span></span>
+      </a>
+      {{if .User}}
+      <div class="nav-links">
+        <a href="/calendar">Calendar</a>
+        <a href="/invoices">Invoices</a>
+        <a href="/onboarding">Business profile</a>
+        <form method="post" action="/logout"><button class="button button-quiet" type="submit">Log out</button></form>
+      </div>
+      {{end}}
+    </nav>
+  </header>
+  <main class="page-shell">{{block "content" .}}{{end}}</main>
+  <footer class="site-footer"><span>Made for the people building small businesses.</span><span>Planning support, not professional advice. Confirm deadlines with the official source.</span></footer>
+</body>
+</html>{{end}}

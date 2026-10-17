@@ -1,0 +1,28 @@
+{{define "content"}}
+<section class="page-intro"><div><p class="eyebrow">CASH FLOW</p><h1>Invoices<span class="heading-light">, in one place.</span></h1><p class="intro-copy">Track what clients owe {{.Biz.Name}} and follow up when payment is late.</p></div></section>
+{{if .ReminderSent}}<div class="notice notice-success" role="status"><span class="notice-icon">✓</span><div><strong>Reminder sent</strong><p>The email was sent successfully. The send date is recorded on the invoice.</p></div></div>{{end}}
+{{if not .SMTPConfigured}}<div class="notice notice-warning"><span class="notice-icon">!</span><div><strong>Email delivery is not configured</strong><p>Set SMTP_HOST, SMTP_USER, and SMTP_PASS on the server to send invoice reminders.</p></div></div>{{end}}
+<section class="invoice-layout">
+  <article class="panel invoice-form-panel"><p class="eyebrow">NEW INVOICE</p><h2>Add an invoice</h2><p class="panel-copy">Add a payment you’re expecting to see it on your calendar.</p>
+    <form method="post" action="/invoices/add" class="stack-form">
+      <label class="field-label">Client name<input name="client" maxlength="120" placeholder="e.g. Amani Studio" required></label>
+      <label class="field-label">Client email <span>optional</span><input type="email" name="email" autocomplete="email" placeholder="accounts@example.com"></label>
+      <label class="field-label">Amount <span>KES</span><input type="number" name="amount" min="1" step="1" placeholder="25000" required></label>
+      <div class="form-grid"><label class="field-label">Issue date<input type="date" name="issue_date" required></label><label class="field-label">Due date<input type="date" name="due_date" required></label></div>
+      <button class="button" type="submit">Add to my invoices <span aria-hidden="true">→</span></button>
+    </form>
+  </article>
+  <section class="invoice-list"><div class="section-heading"><div><p class="eyebrow">YOUR CLIENTS</p><h2>Payment tracker</h2></div><span class="count-pill">{{len .Invoices}} total</span></div>
+    {{if not .Invoices}}<article class="empty-state empty-compact"><div class="empty-icon">＋</div><h3>No invoices yet</h3><p>Invoices you add will show here and appear on the business calendar.</p></article>{{end}}
+    {{range .Invoices}}<article class="invoice-card">
+      <div class="invoice-top"><div><p class="invoice-client">{{.Client}}</p><p class="invoice-dates">Issued {{.IssueDate}} <span>·</span> due {{.DueDate}}</p></div><span class="status-pill status-{{.Status}}">{{.Status}}</span></div>
+      <div class="invoice-amount">KES {{.Amount}}</div>{{if .Email}}<p class="invoice-email">{{.Email}}</p>{{end}}{{if .LastReminded}}<p class="last-reminded">Reminder emailed {{.LastReminded}}</p>{{end}}
+      {{if eq .Status "Paid"}}<p class="paid-note">✓ Paid {{.PaidDate}}</p>{{else}}
+        {{if eq .Status "Overdue"}}{{if $.SMTPConfigured}}<form method="post" action="/invoices/remind" class="remind-form"><input type="hidden" name="id" value="{{.ID}}"><label class="field-label">Send a friendly reminder to<input type="email" name="email" value="{{.Email}}" required></label><button class="button button-secondary" type="submit">Send email reminder <span aria-hidden="true">↗</span></button></form>{{else}}<p class="form-hint">Add SMTP settings to enable email reminders.</p>{{end}}{{end}}
+        <div class="invoice-actions"><form method="post" action="/invoices/paid"><input type="hidden" name="id" value="{{.ID}}"><button class="text-button" type="submit">Mark as paid</button></form><form method="post" action="/invoices/delete"><input type="hidden" name="id" value="{{.ID}}"><button class="text-button text-danger" type="submit">Delete</button></form></div>
+      {{end}}
+    </article>{{end}}
+  </section>
+</section>
+{{if .Scores}}<section class="history-section"><div class="section-heading"><div><p class="eyebrow">PAST PAYMENTS</p><h2>Client payment history</h2></div></div><div class="history-grid">{{range .Scores}}<article class="history-card"><strong>{{.Client}}</strong><span class="rating-pill">{{.Rating}}</span><p>{{.PaidCount}} paid invoice(s) <span>·</span> average {{.AvgDaysLate}} days from due date</p></article>{{end}}</div></section>{{end}}
+{{end}}

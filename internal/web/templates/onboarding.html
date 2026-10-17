@@ -1,0 +1,12 @@
+{{define "content"}}
+<section class="onboarding-layout"><div class="onboarding-intro"><p class="eyebrow">A FEW DETAILS FIRST</p><h1>Let’s make this<br><span>calendar yours.</span></h1><p>Tell us a little about your business. We’ll use it to show the deadlines that apply to you.</p><div class="onboarding-step"><span>01</span><div><strong>Your business profile</strong><p>Usually takes less than two minutes</p></div></div><div class="onboarding-step"><span>02</span><div><strong>Your tailored calendar</strong><p>See relevant dates and reminders</p></div></div></div>
+<article class="onboarding-card"><p class="eyebrow">BUSINESS PROFILE</p><h2>About your business</h2><p class="panel-copy">You can update these details later.</p>
+{{if .Error}}<div class="notice notice-error" role="alert">{{.Error}}</div>{{end}}
+<form method="post" action="/onboarding" class="stack-form">
+  <label class="field-label">Business name<input name="name" value="{{.Biz.Name}}" required maxlength="120" placeholder="e.g. Amani Creative Studio"></label>
+  <div class="form-grid"><label class="field-label">Business type<select name="type" required><option value="" disabled {{if not .Biz.Type}}selected{{end}}>Choose a type</option>{{range .Types}}<option {{if eq . $.Biz.Type}}selected{{end}}>{{.}}</option>{{end}}</select></label><label class="field-label">County<select name="county" required><option value="" disabled {{if not .Biz.County}}selected{{end}}>Choose a county</option>{{range .Counties}}<option {{if eq . $.Biz.County}}selected{{end}}>{{.}}</option>{{end}}</select></label></div>
+  <fieldset class="choice-field"><legend>Is your business registered for VAT?</legend><label><input type="radio" name="vat" value="yes" {{if .Biz.VAT}}checked{{end}}> Yes</label><label><input type="radio" name="vat" value="no" {{if not .Biz.VAT}}checked{{end}}> No</label></fieldset>
+  <fieldset class="choice-field"><legend>Does your business have employees?</legend><label><input type="radio" name="employees" value="yes" {{if .Biz.Employees}}checked{{end}}> Yes</label><label><input type="radio" name="employees" value="no" {{if not .Biz.Employees}}checked{{end}}> No</label></fieldset>
+  <button class="button auth-submit" type="submit">Build my calendar <span aria-hidden="true">→</span></button>
+</form></article></section>
+{{end}}

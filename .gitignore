@@ -1,22 +1,11 @@
-# Environment variables and secrets
+*.db
+*.db-shm
+*.db-wal
+*.exe
 .env
 .env.*
 !.env.example
-
-# Database files and personal data
-*.db
 *.sqlite
 *.sqlite3
 data/
-
-# Compiled binaries
-*.exe
-moneycalendar
-
-# Git and editor files
 .vscode/
-.qodo/
-
-# Operating system files
-.DS_Store
-Thumbs.db

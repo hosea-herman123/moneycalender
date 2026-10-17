@@ -1,12 +1,13 @@
-
 .git
 .gitignore
 .vscode
 *.exe
 *.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
 data/
 .env
 .env.*
 !.env.example
-run.bat
-Dockerfile*

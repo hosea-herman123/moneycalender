@@ -1,33 +1,15 @@
-
-FROM golang:1.27.2-bookworm AS builder
-
-WORKDIR /app
-
+FROM golang:1.26 AS build
+WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
-
 COPY . .
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/kalenda ./cmd/server
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o moneycalendar .
-
-FROM debian:bookworm-slim
-
+FROM alpine:3.21
+RUN apk add --no-cache su-exec \
+    && adduser -D -u 10001 kalenda
 WORKDIR /app
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder /app/moneycalendar ./moneycalendar
-COPY --from=builder /app/templates ./templates
-COPY --from=builder /app/static ./static
-COPY --from=builder /app/rules.json ./rules.json
-
-RUN mkdir -p /app/data
-
-ENV DB_PATH=/app/data/moneycalendar.db
-ENV PORT=8080
-
+COPY --from=build /out/kalenda /app/kalenda
+ENV PORT=8080 DB_PATH=/data/kalenda.db
 EXPOSE 8080
-
-CMD ["./moneycalendar"]
+ENTRYPOINT ["/bin/sh", "-c", "mkdir -p /data && chown kalenda:kalenda /data && exec su-exec kalenda /app/kalenda"]
